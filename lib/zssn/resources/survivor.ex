@@ -8,6 +8,7 @@ defmodule Zssn.Resources.Survivor do
     field :latitude, :decimal
     field :longitude, :decimal
     field :name, :string
+    has_many :survivor_items, Zssn.Resources.SurvivorItem
 
     timestamps()
   end
