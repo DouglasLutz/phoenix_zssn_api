@@ -9,6 +9,8 @@ defmodule ZssnWeb.Router do
     pipe_through :api
 
     resources "/items", ItemController, except: [:new, :edit]
+    resources "/survivors", SurvivorController, except: [:new, :edit, :delete]
+    resources "/survivor_items", SurvivorItemController, except: [:new, :edit]
   end
 
   # Enables LiveDashboard only for development
