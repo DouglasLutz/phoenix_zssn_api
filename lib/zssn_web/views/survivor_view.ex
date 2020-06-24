@@ -16,6 +16,24 @@ defmodule ZssnWeb.SurvivorView do
       gender: survivor.gender,
       age: survivor.age,
       latitude: survivor.latitude,
-      longitude: survivor.longitude}
+      longitude: survivor.longitude,
+      infected: survivor.infected,
+      reports: survivor.reports,
+      survivor_items: render_many(survivor.survivor_items, ZssnWeb.SurvivorItemView, "survivor_item.json")
+    }
+  end
+
+  def render("create.json", %{survivor: survivor}) do
+    %{data: render_one(survivor, SurvivorView, "created_survivor.json")}
+  end
+
+  def render("created_survivor.json", %{survivor: survivor}) do
+    %{id: survivor.id,
+      name: survivor.name,
+      gender: survivor.gender,
+      age: survivor.age,
+      latitude: survivor.latitude,
+      longitude: survivor.longitude
+    }
   end
 end

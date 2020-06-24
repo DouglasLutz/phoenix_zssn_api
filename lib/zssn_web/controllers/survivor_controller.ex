@@ -33,11 +33,13 @@ defmodule ZssnWeb.SurvivorController do
     end
   end
 
-  def delete(conn, %{"id" => id}) do
+  def report(conn, %{"id" => id}) do
     survivor = Resources.get_survivor!(id)
+    attrs = %{reports: (survivor.reports + 1),
+              infected: (survivor.reports + 1 >= 3)}
 
-    with {:ok, %Survivor{}} <- Resources.delete_survivor(survivor) do
-      send_resp(conn, :no_content, "")
+    with {:ok, %Survivor{} = survivor} <- Resources.update_survivor(survivor, attrs) do
+      render(conn, "show.json", survivor: survivor)
     end
   end
 end

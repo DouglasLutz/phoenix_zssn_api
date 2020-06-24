@@ -11,7 +11,8 @@ defmodule ZssnWeb.SurvivorItemView do
   end
 
   def render("survivor_item.json", %{survivor_item: survivor_item}) do
-    %{id: survivor_item.id,
+    %{item_id: survivor_item.item_id,
+      survivor_id: survivor_item.survivor_id,
       quantity: survivor_item.quantity}
   end
 end

@@ -32,12 +32,4 @@ defmodule ZssnWeb.ItemController do
       render(conn, "show.json", item: item)
     end
   end
-
-  def delete(conn, %{"id" => id}) do
-    item = Resources.get_item!(id)
-
-    with {:ok, %Item{}} <- Resources.delete_item(item) do
-      send_resp(conn, :no_content, "")
-    end
-  end
 end
