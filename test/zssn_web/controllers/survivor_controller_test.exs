@@ -82,7 +82,28 @@ defmodule ZssnWeb.SurvivorControllerTest do
       conn = put(conn, Routes.survivor_path(conn, :update, survivor), survivor: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
+
+    test "update infection stats when reported", %{conn: conn, survivor: survivor} do
+      conn = put(conn, Routes.survivor_path(conn, :report, survivor))
+      assert %{
+        "reports" => 1,
+        "infected" => false
+      } = json_response(conn, 200)["data"]
+
+      conn = put(conn, Routes.survivor_path(conn, :report, survivor))
+      assert %{
+        "reports" => 2,
+        "infected" => false
+      } = json_response(conn, 200)["data"]
+
+      conn = put(conn, Routes.survivor_path(conn, :report, survivor))
+      assert %{
+        "reports" => 3,
+        "infected" => true
+      } = json_response(conn, 200)["data"]
+    end
   end
+
 
   defp create_survivor(_) do
     survivor = fixture(:survivor)

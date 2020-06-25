@@ -72,19 +72,6 @@ defmodule ZssnWeb.ItemControllerTest do
     end
   end
 
-  describe "delete item" do
-    setup [:create_item]
-
-    test "deletes chosen item", %{conn: conn, item: item} do
-      conn = delete(conn, Routes.item_path(conn, :delete, item))
-      assert response(conn, 204)
-
-      assert_error_sent 404, fn ->
-        get(conn, Routes.item_path(conn, :show, item))
-      end
-    end
-  end
-
   defp create_item(_) do
     item = fixture(:item)
     %{item: item}

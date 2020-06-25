@@ -43,6 +43,12 @@ defmodule Zssn.Resources do
     |> Repo.preload(:survivor_items)
   end
 
+  def get_survivor(id) do
+    Survivor
+    |> Repo.get(id)
+    |> Repo.preload(:survivor_items)
+  end
+
   def create_survivor(attrs \\ %{}) do
     %Survivor{}
     |> Survivor.changeset(attrs)
