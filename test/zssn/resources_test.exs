@@ -131,7 +131,6 @@ defmodule Zssn.ResourcesTest do
   end
 
   describe "survivor_items" do
-
     def survivor_with_item_fixture(attrs \\ %{}) do
       {:ok, item} =
         attrs
@@ -184,12 +183,32 @@ defmodule Zssn.ResourcesTest do
       assert survivor_item == Resources.get_survivor_item_by(%{item_id: survivor_item.item_id, survivor_id: survivor.id})
     end
 
-    test "update_or_create_survivor_item/1 with valid data returns the correct survivor_item" do
+    test "get_or_create_survivor_item/1 with valid data returns the correct survivor_item" do
       {survivor, item} = {survivor_fixture(), item_fixture()}
 
-      assert {:ok, %SurvivorItem{} = created_survivor_item} = Resources.update_or_create_survivor_item(%{survivor_id: survivor.id, item_id: item.id, quantity: 42})
-      assert {:ok, %SurvivorItem{} = updated_survivor_item} = Resources.update_or_create_survivor_item(%{survivor_id: survivor.id, item_id: item.id, quantity: 43})
-      assert created_survivor_item.id == updated_survivor_item.id
+      assert %SurvivorItem{} = created_survivor_item = Resources.get_or_create_survivor_item(%{survivor_id: survivor.id, item_id: item.id})
+      assert %SurvivorItem{} = gotten_survivor_item = Resources.get_or_create_survivor_item(%{survivor_id: survivor.id, item_id: item.id})
+      assert created_survivor_item.id == gotten_survivor_item.id
+    end
+
+    test "trade_items/1 with valid data returns :ok" do
+      {_, first_survivor_item} = survivor_with_item_fixture()
+      {_, second_survivor_item} = survivor_with_item_fixture()
+
+      trade_params = %{
+        "trade_items_1" => [%{
+          "survivor_id" => first_survivor_item.survivor_id,
+          "item_id" => first_survivor_item.item_id,
+          "quantity" => first_survivor_item.quantity - 10
+        }],
+        "trade_items_2" => [%{
+          "survivor_id" => second_survivor_item.survivor_id,
+          "item_id" => second_survivor_item.item_id,
+          "quantity" => second_survivor_item.quantity - 10
+        }]
+      }
+
+      assert :ok = Resources.trade_items(trade_params)
     end
   end
 end
