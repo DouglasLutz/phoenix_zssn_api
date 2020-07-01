@@ -27,10 +27,6 @@ defmodule Zssn.Resources do
     |> Repo.update()
   end
 
-  def change_item(%Item{} = item, attrs \\ %{}) do
-    Item.changeset(item, attrs)
-  end
-
   alias Zssn.Resources.Survivor
 
   def list_survivors do
@@ -60,10 +56,6 @@ defmodule Zssn.Resources do
     survivor
     |> Survivor.changeset(attrs)
     |> Repo.update()
-  end
-
-  def change_survivor(%Survivor{} = survivor, attrs \\ %{}) do
-    Survivor.changeset(survivor, attrs)
   end
 
   alias Zssn.Resources.SurvivorItem
@@ -102,7 +94,6 @@ defmodule Zssn.Resources do
     SurvivorItem.changeset(survivor_item, attrs)
   end
 
-  require IEx;
   def trade_items(attrs) do
     multi =
       change_trade_suvivor_items(attrs)
