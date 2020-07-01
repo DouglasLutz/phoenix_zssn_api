@@ -64,16 +64,16 @@ defmodule Zssn.Resources do
     Repo.get!(SurvivorItem, id)
   end
 
-  def get_survivor_item_by(attrs) do
-    Repo.get_by(SurvivorItem, %{survivor_id: attrs.survivor_id, item_id: attrs.item_id})
+  def get_survivor_item_by(%{survivor_id: survivor_id, item_id: item_id}) do
+    Repo.get_by(SurvivorItem, %{survivor_id: survivor_id, item_id: item_id})
   end
 
-  def get_or_create_survivor_item(attrs) do
-      case get_survivor_item_by(attrs) do
+  def get_or_create_survivor_item(%{survivor_id: survivor_id, item_id: item_id}) do
+      case get_survivor_item_by(%{survivor_id: survivor_id, item_id: item_id}) do
         %SurvivorItem{} = survivor_item ->
           survivor_item
         nil ->
-          {:ok, %SurvivorItem{} = survivor_item} = create_survivor_item(Map.merge(attrs, %{quantity: 0}))
+          {:ok, %SurvivorItem{} = survivor_item} = create_survivor_item(%{survivor_id: survivor_id, item_id: item_id, quantity: 0})
           survivor_item
       end
   end
@@ -94,7 +94,7 @@ defmodule Zssn.Resources do
     SurvivorItem.changeset(survivor_item, attrs)
   end
 
-  def trade_items(attrs) do
+  def trade_items(%{"trade_items_1" => _, "trade_items_2" => _} = attrs) do
     multi =
       change_trade_suvivor_items(attrs)
       |> Enum.reduce(Multi.new(), fn changeset, multi ->
@@ -113,34 +113,35 @@ defmodule Zssn.Resources do
     end
   end
 
-  defp change_trade_suvivor_items(attrs) do
-    first_survivor_id = attrs["trade_items_1"] |> Enum.at(0) |> Map.get("survivor_id")
-    second_survivor_id = attrs["trade_items_2"] |> Enum.at(0) |> Map.get("survivor_id")
+  defp change_trade_suvivor_items(%{"trade_items_1" => trade_items_1, "trade_items_2" => trade_items_2}) do
+    other_survivor_id = List.first(trade_items_2) |> Map.get("survivor_id")
 
     changesets =
-      Enum.reduce(attrs["trade_items_1"], [], fn survivor_item_attrs, list ->
-        remove_from = get_survivor_item_by(%{item_id: survivor_item_attrs["item_id"], survivor_id: first_survivor_id})
-        insert_into = get_or_create_survivor_item(%{item_id: survivor_item_attrs["item_id"], survivor_id: second_survivor_id})
+    Enum.reduce(trade_items_1, [], fn %{"item_id" => item_id, "quantity" => quantity, "survivor_id" => survivor_id}, list ->
+      remove_from = get_survivor_item_by(%{item_id: item_id, survivor_id: survivor_id})
+      insert_into = get_or_create_survivor_item(%{item_id: item_id, survivor_id: other_survivor_id})
+
+      list ++
+      [
+        change_survivor_item(remove_from, %{quantity: remove_from.quantity - quantity}),
+        change_survivor_item(insert_into, %{quantity: insert_into.quantity + quantity})
+      ]
+    end)
+
+    other_survivor_id = List.first(trade_items_1) |> Map.get("survivor_id")
+
+    changesets = changesets ++
+      Enum.reduce(trade_items_2, [], fn %{"item_id" => item_id, "quantity" => quantity, "survivor_id" => survivor_id}, list ->
+        remove_from = get_survivor_item_by(%{item_id: item_id, survivor_id: survivor_id})
+        insert_into = get_or_create_survivor_item(%{item_id: item_id, survivor_id: other_survivor_id})
 
         list ++
           [
-            change_survivor_item(remove_from, %{quantity: remove_from.quantity - survivor_item_attrs["quantity"]}),
-            change_survivor_item(insert_into, %{quantity: insert_into.quantity + survivor_item_attrs["quantity"]})
+            change_survivor_item(remove_from, %{quantity: remove_from.quantity - quantity}),
+            change_survivor_item(insert_into, %{quantity: insert_into.quantity + quantity})
           ]
       end)
 
-      changesets = changesets ++
-        Enum.reduce(attrs["trade_items_2"], [], fn survivor_item_attrs, list ->
-          remove_from = get_survivor_item_by(%{item_id: survivor_item_attrs["item_id"], survivor_id: second_survivor_id})
-          insert_into = get_or_create_survivor_item(%{item_id: survivor_item_attrs["item_id"], survivor_id: first_survivor_id})
-
-          list ++
-            [
-              change_survivor_item(remove_from, %{quantity: remove_from.quantity - survivor_item_attrs["quantity"]}),
-              change_survivor_item(insert_into, %{quantity: insert_into.quantity + survivor_item_attrs["quantity"]})
-            ]
-        end)
-
-      changesets
+    changesets
   end
 end
