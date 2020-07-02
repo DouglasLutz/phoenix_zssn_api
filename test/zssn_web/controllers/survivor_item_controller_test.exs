@@ -1,7 +1,7 @@
 defmodule ZssnWeb.SurvivorItemControllerTest do
   use ZssnWeb.ConnCase
 
-  alias Zssn.{Items, Survivors, Inventories}
+  alias Zssn.{Items, Survivors}
 
   @valid_item_attrs %{name: "some name", value: 42}
   @valid_survivor_attrs %{age: 42, gender: "some gender", latitude: "120.5", longitude: "120.5", name: "some name"}
