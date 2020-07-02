@@ -1,6 +1,8 @@
 defmodule ZssnWeb.Schema.Query.SurvivorsTest do
   use ZssnWeb.ConnCase
 
+  alias Zssn.Resources.Survivor
+
   setup do
     Zssn.Seeds.run()
 
@@ -20,7 +22,7 @@ defmodule ZssnWeb.Schema.Query.SurvivorsTest do
     }
   }
   """
-  test "survivors fields returns survivors", %{conn: conn} do
+  test "survivors field returns survivors", %{conn: conn} do
     conn = get conn, "/api", query: @query
 
     assert json_response(conn, 200) == %{
@@ -127,6 +129,58 @@ defmodule ZssnWeb.Schema.Query.SurvivorsTest do
         ]
       }
     }
+  end
+
+  @query """
+  query($filter: SurvivorFilter!){
+    survivors(filter: $filter){
+      name
+      insertedAt
+    }
+  }
+  """
+  @variables %{filter: %{"insertedBefore" => "2015-01-02"}}
+  test "survivors filtered by a custom scalar", %{conn: conn} do
+    %Survivor{
+        name: "John",
+        gender: "male",
+        age: 22,
+        latitude: 22.392833,
+        longitude: 22.392833,
+        inserted_at: ~N[2015-01-01 00:00:00]
+    } |> Zssn.Repo.insert!
+
+    conn = get conn, "/api", query: @query, variables: @variables
+    assert %{
+      "data" => %{
+        "survivors" => [%{"name" => "John", "insertedAt" => "2015-01-01"}]
+      }
+    } == json_response(conn, 200)
+  end
+
+  @query """
+  query($filter: SurvivorFilter!){
+    survivors(filter: $filter){
+      name
+    }
+  }
+  """
+  @variables %{filter: %{"insertedBefore" => "not-a-date"}}
+  test "survivors filtered by a custom scalar with error", %{conn: conn} do
+    conn = get conn, "/api", query: @query, variables: @variables
+
+    assert %{
+      "errors" => [%{
+        "message" => message
+      }]
+    } = json_response(conn, 200)
+
+    expected = """
+    Argument "filter" has invalid value $filter.
+    In field "insertedBefore": Expected type "Date", found "not-a-date".\
+    """
+
+    assert expected == message
   end
 
   @query """

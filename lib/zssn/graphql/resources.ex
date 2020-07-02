@@ -29,6 +29,10 @@ defmodule Zssn.Graphql.Resources do
         from q in query, where: q.age >= ^age
       {:aged_below, age}, query ->
         from q in query, where: q.age <= ^age
+      {:inserted_after, date}, query ->
+        from q in query, where: q.inserted_at >= ^date
+      {:inserted_before, date}, query ->
+        from q in query, where: q.inserted_at <= ^date
     end)
   end
 end
