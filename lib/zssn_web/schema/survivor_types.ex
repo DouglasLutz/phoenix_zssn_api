@@ -8,7 +8,7 @@ defmodule ZssnWeb.Schema.SurvivorTypes do
     field :survivors, list_of(:survivor) do
       arg :filter, :survivor_filter
       arg :order, type: :sort_order, default_value: :asc
-      resolve &Resolvers.Resources.survivors/3
+      resolve &Resolvers.Survivors.survivors/3
     end
   end
 

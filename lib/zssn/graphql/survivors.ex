@@ -1,4 +1,4 @@
-defmodule Zssn.Graphql.Resources do
+defmodule Zssn.Graphql.Survivors do
   import Ecto.Query, warn: false
 
   alias Zssn.Repo
@@ -30,10 +30,6 @@ defmodule Zssn.Graphql.Resources do
         from q in query, where: q.inserted_at >= ^date
       {:inserted_before, date}, query ->
         from q in query, where: q.inserted_at <= ^date
-      {:valued_above, value}, query ->
-        from q in query, where: q.value >= ^value
-      {:valued_below, value}, query ->
-        from q in query, where: q.value <= ^value
     end)
   end
 end
