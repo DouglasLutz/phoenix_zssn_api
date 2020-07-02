@@ -64,11 +64,6 @@ defmodule Zssn.ResourcesTest do
       assert {:error, %Ecto.Changeset{}} = Resources.update_item(item, @invalid_attrs)
       assert item == Resources.get_item!(item.id)
     end
-
-    test "change_item/1 returns a item changeset" do
-      item = item_fixture()
-      assert %Ecto.Changeset{} = Resources.change_item(item)
-    end
   end
 
   describe "survivors" do
@@ -122,11 +117,6 @@ defmodule Zssn.ResourcesTest do
       survivor = survivor_fixture()
       assert {:error, %Ecto.Changeset{}} = Resources.update_survivor(survivor, @invalid_attrs)
       assert survivor == Resources.get_survivor!(survivor.id)
-    end
-
-    test "change_survivor/1 returns a survivor changeset" do
-      survivor = survivor_fixture()
-      assert %Ecto.Changeset{} = Resources.change_survivor(survivor)
     end
   end
 
