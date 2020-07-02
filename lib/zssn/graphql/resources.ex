@@ -2,19 +2,16 @@ defmodule Zssn.Graphql.Resources do
   import Ecto.Query, warn: false
 
   alias Zssn.Repo
-  alias Zssn.Resources.Survivor
-
-  def list_survivors(filters) do
+  def list(module, filters) do
     filters
-    |> Enum.reduce(Survivor, fn
+    |> Enum.reduce(module, fn
       {_, nil}, query ->
         query
       {:order, order}, query ->
         query |> order_by({^order, :name})
       {:filter, filter}, query ->
         query |> filter_with(filter)
-    end)
-    |> Repo.all()
+    end) |> Repo.all()
   end
 
   defp filter_with(query, filter) do
@@ -33,6 +30,10 @@ defmodule Zssn.Graphql.Resources do
         from q in query, where: q.inserted_at >= ^date
       {:inserted_before, date}, query ->
         from q in query, where: q.inserted_at <= ^date
+      {:valued_above, value}, query ->
+        from q in query, where: q.value >= ^value
+      {:valued_below, value}, query ->
+        from q in query, where: q.value <= ^value
     end)
   end
 end

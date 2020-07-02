@@ -3,7 +3,7 @@ defmodule ZssnWeb.Schema do
 
   alias ZssnWeb.Resolvers
 
-  import_types __MODULE__.SurvivorTypes
+  import_types __MODULE__.{SurvivorTypes, ItemTypes}
 
   query do
     @desc "The list of survivors in the application"
@@ -13,6 +13,11 @@ defmodule ZssnWeb.Schema do
       resolve &Resolvers.Resources.survivors/3
     end
 
+    field :items, list_of(:item) do
+      arg :filter, :item_filter
+      arg :order, type: :sort_order, default_value: :asc
+      resolve &Resolvers.Resources.items/3
+    end
   end
 
   @desc "Date data structure\nAccepts strings formated as \"YYYY-DD-MM\""
