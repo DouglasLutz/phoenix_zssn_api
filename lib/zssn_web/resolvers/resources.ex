@@ -1,6 +1,7 @@
 defmodule ZssnWeb.Resolvers.Resources do
   alias Zssn.Graphql.Resources
-  alias Zssn.Resources.{Survivor, Item}
+
+  alias Zssn.{Survivors.Survivor, Items.Item}
 
   def survivors(_, args, _) do
     {:ok, Resources.list(Survivor, args)}

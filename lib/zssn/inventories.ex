@@ -1,73 +1,9 @@
-defmodule Zssn.Resources do
-  @moduledoc """
-  The Resources context.
-  """
-
+defmodule Zssn.Inventories do
   import Ecto.Query, warn: false
 
   alias Ecto.Multi
   alias Zssn.Repo
-  alias Zssn.Resources.Item
-
-  @spec list_items() :: [%Item{}]
-  def list_items do
-    Repo.all(Item)
-  end
-
-  @spec get_item!(integer() | binary()) :: %Item{}
-  def get_item!(id), do: Repo.get!(Item, id)
-
-  @spec create_item(%{optional(atom | binary) => binary | number()}) :: {:ok, %Item{}} | {:error, Ecto.Changeset}
-  def create_item(attrs \\ %{}) do
-    %Item{}
-    |> Item.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  @spec update_item(%Item{}, %{optional(atom | binary) => binary | number()}) :: {:ok, %Item{}} | {:error, Ecto.Changeset}
-  def update_item(%Item{} = item, attrs) do
-    item
-    |> Item.changeset(attrs)
-    |> Repo.update()
-  end
-
-  alias Zssn.Resources.Survivor
-
-  @spec list_survivors() :: [%Survivor{}]
-  def list_survivors do
-    Repo.all(Survivor)
-    |> Repo.preload(:survivor_items)
-  end
-
-  @spec get_survivor!(integer() | binary()) :: %Survivor{}
-  def get_survivor!(id) do
-    Survivor
-    |> Repo.get!(id)
-    |> Repo.preload(:survivor_items)
-  end
-
-  @spec get_survivor(integer() | binary()) :: %Survivor{} | nil
-  def get_survivor(id) do
-    Survivor
-    |> Repo.get(id)
-    |> Repo.preload(:survivor_items)
-  end
-
-  @spec create_survivor(%{optional(atom | binary) => binary | number()}) :: {:ok, %Survivor{}} | {:error, Ecto.Changeset}
-  def create_survivor(attrs \\ %{}) do
-    %Survivor{}
-    |> Survivor.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  @spec update_survivor(%Survivor{}, %{optional(atom | binary) => binary | number()}) :: {:ok, %Survivor{}} | {:error, Ecto.Changeset}
-  def update_survivor(%Survivor{} = survivor, attrs) do
-    survivor
-    |> Survivor.changeset(attrs)
-    |> Repo.update()
-  end
-
-  alias Zssn.Resources.SurvivorItem
+  alias Zssn.Inventories.SurvivorItem
 
   @spec get_survivor_item!(integer() | binary()) :: Zssn.Resources.SurvivorItem.t()
   def get_survivor_item!(id) do

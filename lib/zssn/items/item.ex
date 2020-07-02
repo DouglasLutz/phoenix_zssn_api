@@ -1,4 +1,4 @@
-defmodule Zssn.Resources.Item do
+defmodule Zssn.Items.Item do
   use Ecto.Schema
   import Ecto.Changeset
 

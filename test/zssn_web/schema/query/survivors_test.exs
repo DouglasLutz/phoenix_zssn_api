@@ -1,7 +1,7 @@
 defmodule ZssnWeb.Schema.Query.SurvivorsTest do
   use ZssnWeb.ConnCase
 
-  alias Zssn.Resources.Survivor
+  alias Zssn.Survivors.Survivor
 
   setup do
     Zssn.Seeds.run()

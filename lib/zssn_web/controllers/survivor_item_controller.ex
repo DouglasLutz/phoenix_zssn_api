@@ -1,8 +1,8 @@
 defmodule ZssnWeb.SurvivorItemController do
   use ZssnWeb, :controller
 
-  alias Zssn.Resources
-  alias Zssn.Resources.SurvivorItem
+  alias Zssn.Inventories
+  alias Zssn.Inventories.SurvivorItem
 
   action_fallback ZssnWeb.FallbackController
 
@@ -11,7 +11,7 @@ defmodule ZssnWeb.SurvivorItemController do
       :ok <- validate_survivor_inventories(trade_items),
       :ok <- validate_trade_items(trade_items),
       :ok <- validate_trade_values(trade_items),
-      :ok <- Resources.trade_items(trade_items)
+      :ok <- Inventories.trade_items(trade_items)
     ) do
       send_resp(conn, :no_content, "")
     else
@@ -43,7 +43,7 @@ defmodule ZssnWeb.SurvivorItemController do
       trade_items
       |> Enum.map(fn survivor_item_attrs ->
         inventory_quantity =
-          case Resources.get_survivor_item_by(%{item_id: survivor_item_attrs["item_id"], survivor_id: survivor_item_attrs["survivor_id"]}) do
+          case Inventories.get_survivor_item_by(%{item_id: survivor_item_attrs["item_id"], survivor_id: survivor_item_attrs["survivor_id"]}) do
             %SurvivorItem{} = survivor_item ->
               survivor_item.quantity
             nil ->
@@ -85,7 +85,7 @@ defmodule ZssnWeb.SurvivorItemController do
   defp sum_trade_values(trade_items) do
     trade_items
     |> Enum.map(fn survivor_item_attrs ->
-      item = Resources.get_item!(survivor_item_attrs["item_id"])
+      item = Zssn.Items.get_item!(survivor_item_attrs["item_id"])
       survivor_item_attrs["quantity"] * item.value
     end)
     |> Enum.sum
