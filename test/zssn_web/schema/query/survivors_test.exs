@@ -29,7 +29,7 @@ defmodule ZssnWeb.Schema.Query.SurvivorsTest do
           %{
             "name" => "Douglas",
             "age" => 22,
-            "gender" => "male",
+            "gender" => "MALE",
             "infected" => false,
             "latitude" => "22.392833",
             "longitude" => "22.392833",
@@ -38,7 +38,7 @@ defmodule ZssnWeb.Schema.Query.SurvivorsTest do
           %{
             "name" => "Peter",
             "age" => 25,
-            "gender" => "male",
+            "gender" => "MALE",
             "infected" => false,
             "latitude" => "30.392833",
             "longitude" => "42.392833",

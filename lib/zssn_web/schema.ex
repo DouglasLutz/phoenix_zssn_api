@@ -16,7 +16,7 @@ defmodule ZssnWeb.Schema do
     field :id, :id
     field :name, :string
     field :age, :integer
-    field :gender, :string
+    field :gender, :gender
     field :latitude, :string
     field :longitude, :string
     field :reports, :integer
@@ -29,7 +29,7 @@ defmodule ZssnWeb.Schema do
     field :name, :string
 
     @desc "Matching a gender"
-    field :gender, :string
+    field :gender, :gender
 
     @desc "Infected survivors"
     field :infected, :boolean
@@ -39,6 +39,11 @@ defmodule ZssnWeb.Schema do
 
     @desc "Aged below a value"
     field :aged_below, :integer
+
+  @desc "Available options for gender field"
+  enum :gender do
+    value :male, as: "male"
+    value :female, as: "female"
   end
 
   enum :sort_order do
