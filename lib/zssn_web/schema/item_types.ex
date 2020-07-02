@@ -7,7 +7,7 @@ defmodule ZssnWeb.Schema.ItemTypes do
     field :items, list_of(:item) do
       arg :filter, :item_filter
       arg :order, type: :sort_order, default_value: :asc
-      resolve &Resolvers.Resources.items/3
+      resolve &Resolvers.Items.items/3
     end
   end
 

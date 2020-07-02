@@ -1,8 +1,8 @@
 defmodule ZssnWeb.ItemControllerTest do
   use ZssnWeb.ConnCase
 
-  alias Zssn.Resources
-  alias Zssn.Resources.Item
+  alias Zssn.Items
+  alias Zssn.Items.Item
 
   @create_attrs %{
     name: "some name",
@@ -15,7 +15,7 @@ defmodule ZssnWeb.ItemControllerTest do
   @invalid_attrs %{name: nil, value: nil}
 
   def fixture(:item) do
-    {:ok, item} = Resources.create_item(@create_attrs)
+    {:ok, item} = Items.create_item(@create_attrs)
     item
   end
 

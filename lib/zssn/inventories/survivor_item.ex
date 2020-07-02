@@ -1,12 +1,12 @@
-defmodule Zssn.Resources.SurvivorItem do
+defmodule Zssn.Inventories.SurvivorItem do
   use Ecto.Schema
   import Ecto.Changeset
 
   schema "survivor_items" do
     field :quantity, :integer
 
-    belongs_to :survivor, Zssn.Resources.Survivor
-    belongs_to :item, Zssn.Resources.Item
+    belongs_to :survivor, Zssn.Survivors.Survivor
+    belongs_to :item, Zssn.Items.Item
 
     timestamps()
   end

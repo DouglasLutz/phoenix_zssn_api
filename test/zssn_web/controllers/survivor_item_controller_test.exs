@@ -1,29 +1,29 @@
 defmodule ZssnWeb.SurvivorItemControllerTest do
   use ZssnWeb.ConnCase
 
-  alias Zssn.Resources
+  alias Zssn.{Items, Survivors}
 
   @valid_item_attrs %{name: "some name", value: 42}
   @valid_survivor_attrs %{age: 42, gender: "some gender", latitude: "120.5", longitude: "120.5", name: "some name"}
 
   def fixture(:survivor_items) do
-    {:ok, item_1} = Resources.create_item(@valid_item_attrs)
-    {:ok, item_2} = Resources.create_item(@valid_item_attrs)
+    {:ok, item_1} = Items.create_item(@valid_item_attrs)
+    {:ok, item_2} = Items.create_item(@valid_item_attrs)
 
     {:ok, survivor} =
       @valid_survivor_attrs
       |> Enum.into(%{survivor_items: [%{item_id: item_1.id, quantity: 42}, %{item_id: item_2.id, quantity: 42}]})
-      |> Resources.create_survivor()
+      |> Survivors.create_survivor()
 
-    survivor = Resources.get_survivor(survivor.id)
+    survivor = Survivors.get_survivor(survivor.id)
     first_survivor_item = survivor.survivor_items |> Enum.at(0)
 
     {:ok, survivor} =
       @valid_survivor_attrs
       |> Enum.into(%{survivor_items: [%{item_id: item_2.id, quantity: 42}, %{item_id: item_1.id, quantity: 42}]})
-      |> Resources.create_survivor()
+      |> Survivors.create_survivor()
 
-    survivor = Resources.get_survivor(survivor.id)
+    survivor = Survivors.get_survivor(survivor.id)
     second_survivor_item = survivor.survivor_items |> Enum.at(0)
 
     {first_survivor_item, second_survivor_item}

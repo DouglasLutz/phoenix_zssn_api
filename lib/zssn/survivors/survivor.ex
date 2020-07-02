@@ -1,4 +1,4 @@
-defmodule Zssn.Resources.Survivor do
+defmodule Zssn.Survivors.Survivor do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -11,7 +11,7 @@ defmodule Zssn.Resources.Survivor do
     field :infected, :boolean
     field :reports, :integer
 
-    has_many :survivor_items, Zssn.Resources.SurvivorItem
+    has_many :survivor_items, Zssn.Inventories.SurvivorItem
 
     timestamps()
   end
@@ -20,7 +20,7 @@ defmodule Zssn.Resources.Survivor do
   def changeset(survivor, attrs) do
     survivor
     |> cast(attrs, [:name, :gender, :age, :latitude, :longitude, :infected, :reports])
-    |> cast_assoc(:survivor_items, with: &Zssn.Resources.SurvivorItem.changeset/2)
+    |> cast_assoc(:survivor_items, with: &Zssn.Inventories.SurvivorItem.changeset/2)
     |> validate_required([:name, :gender, :age, :latitude, :longitude])
   end
 end

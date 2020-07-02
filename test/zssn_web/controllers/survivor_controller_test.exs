@@ -1,8 +1,8 @@
 defmodule ZssnWeb.SurvivorControllerTest do
   use ZssnWeb.ConnCase
 
-  alias Zssn.Resources
-  alias Zssn.Resources.Survivor
+  alias Zssn.Survivors
+  alias Zssn.Survivors.Survivor
 
   @create_attrs %{
     age: 42,
@@ -21,7 +21,7 @@ defmodule ZssnWeb.SurvivorControllerTest do
   @invalid_attrs %{age: nil, gender: nil, latitude: nil, longitude: nil, name: nil}
 
   def fixture(:survivor) do
-    {:ok, survivor} = Resources.create_survivor(@create_attrs)
+    {:ok, survivor} = Survivors.create_survivor(@create_attrs)
     survivor
   end
 
