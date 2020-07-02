@@ -1,23 +1,11 @@
 defmodule ZssnWeb.Schema do
   use Absinthe.Schema
 
-  alias ZssnWeb.Resolvers
-
   import_types __MODULE__.{SurvivorTypes, ItemTypes}
 
   query do
-    @desc "The list of survivors in the application"
-    field :survivors, list_of(:survivor) do
-      arg :filter, :survivor_filter
-      arg :order, type: :sort_order, default_value: :asc
-      resolve &Resolvers.Resources.survivors/3
-    end
-
-    field :items, list_of(:item) do
-      arg :filter, :item_filter
-      arg :order, type: :sort_order, default_value: :asc
-      resolve &Resolvers.Resources.items/3
-    end
+    import_fields :survivor_queries
+    import_fields :item_queries
   end
 
   @desc "Date data structure\nAccepts strings formated as \"YYYY-DD-MM\""

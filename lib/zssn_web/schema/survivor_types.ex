@@ -1,6 +1,17 @@
 defmodule ZssnWeb.Schema.SurvivorTypes do
   use Absinthe.Schema.Notation
 
+  alias ZssnWeb.Resolvers
+
+  object :survivor_queries do
+    @desc "The list of survivors in the application"
+    field :survivors, list_of(:survivor) do
+      arg :filter, :survivor_filter
+      arg :order, type: :sort_order, default_value: :asc
+      resolve &Resolvers.Resources.survivors/3
+    end
+  end
+
   @desc "A survivor in this big world"
   object :survivor do
     field :id, :id
