@@ -3,14 +3,6 @@ defmodule ZssnWeb.Schema.SurvivorTypes do
 
   alias ZssnWeb.Resolvers
 
-  input_object :survivor_input do
-    field :name, :string
-    field :age, :integer
-    field :gender, :gender
-    field :latitude, :decimal
-    field :longitude, :decimal
-  end
-
   object :survivor_queries do
     @desc "The list of survivors in the application"
     field :survivors, list_of(:survivor) do
@@ -36,6 +28,11 @@ defmodule ZssnWeb.Schema.SurvivorTypes do
     end
   end
 
+  object :survivor_result do
+    field :survivor, :survivor
+    field :errors, list_of(:input_error)
+  end
+
   @desc "Filtering options for the survivors list"
   input_object :survivor_filter do
     @desc "Matching a name"
@@ -58,6 +55,14 @@ defmodule ZssnWeb.Schema.SurvivorTypes do
 
     @desc "Inserted before this date"
     field :inserted_before, :date
+  end
+
+  input_object :survivor_input do
+    field :name, :string
+    field :age, :integer
+    field :gender, :gender
+    field :latitude, :decimal
+    field :longitude, :decimal
   end
 
   @desc "Available options for gender field"

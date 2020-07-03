@@ -9,17 +9,23 @@ defmodule ZssnWeb.Schema.Mutation.CreateSurvivorsTest do
   @query """
   mutation CreateSurvivor($survivor: SurvivorInput!){
     createSurvivor(input: $survivor){
-      name
-      gender
-      age
-      latitude
-      longitude
-      inventory{
-        quantity
-        itemId
+      errors {
+        key
+        message
       }
-      infected
-      reports
+      survivor {
+        name
+        gender
+        age
+        latitude
+        longitude
+        inventory{
+          quantity
+          itemId
+        }
+        infected
+        reports
+      }
     }
   }
   """
@@ -36,14 +42,17 @@ defmodule ZssnWeb.Schema.Mutation.CreateSurvivorsTest do
     assert json_response(conn, 200) == %{
       "data" => %{
         "createSurvivor" => %{
-          "name" => @survivor.name,
-          "age" => @survivor.age,
-          "gender" => @survivor.gender,
-          "latitude" => @survivor.latitude,
-          "longitude" => @survivor.longitude,
-          "infected" => false,
-          "inventory" => [],
-          "reports" => 0
+          "errors" => nil,
+          "survivor" => %{
+            "name" => @survivor.name,
+            "age" => @survivor.age,
+            "gender" => @survivor.gender,
+            "latitude" => @survivor.latitude,
+            "longitude" => @survivor.longitude,
+            "infected" => false,
+            "inventory" => [],
+            "reports" => 0
+          }
         }
       }
     }
@@ -58,14 +67,15 @@ defmodule ZssnWeb.Schema.Mutation.CreateSurvivorsTest do
   test "creating a survivor without a name fails", %{conn: conn} do
     conn = post conn, "/api", query: @query, variables: %{"survivor" => @survivor}
 
-    assert %{
-      "data" => %{"createSurvivor" => nil},
-      "errors" => [%{
-        "message" => "Could not create survivor",
-        "details" => details
-      }]
-    } = json_response(conn, 200)
-
-    assert details == %{"name" => ["can't be blank"]}
+    assert json_response(conn, 200) == %{
+      "data" => %{
+        "createSurvivor" => %{
+          "errors" => [
+            %{"key" => "name", "message" => "can't be blank"}
+          ],
+          "survivor" => nil
+        }
+      }
+    }
   end
 end

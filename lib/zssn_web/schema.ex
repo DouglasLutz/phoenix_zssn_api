@@ -10,15 +10,16 @@ defmodule ZssnWeb.Schema do
   end
 
   mutation do
-    field :create_survivor, :survivor do
+    field :create_survivor, :survivor_result do
       arg :input, non_null(:survivor_input)
       resolve &ZssnWeb.Resolvers.Survivors.create_survivor/3
     end
+  end
 
-    # field :update_survivor, :survivor do
-    #   arg :input, non_null(:survivor_input)
-    #   resolve
-    # end
+  @desc "An error encountered trying to persist input"
+  object :input_error do
+    field :key, non_null(:string)
+    field :message, non_null(:string)
   end
 
   @desc "Date data structure - Accepts strings formated as \"YYYY-DD-MM\""
