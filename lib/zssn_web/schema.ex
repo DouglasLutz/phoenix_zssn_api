@@ -9,7 +9,17 @@ defmodule ZssnWeb.Schema do
     import_fields :inventory_queries
   end
 
-  @desc "Date data structure\nAccepts strings formated as \"YYYY-DD-MM\""
+  mutation do
+    import_fields :survivor_mutations
+  end
+
+  @desc "An error encountered trying to persist input"
+  object :input_error do
+    field :key, non_null(:string)
+    field :message, non_null(:string)
+  end
+
+  @desc "Date data structure - Accepts strings formated as \"YYYY-DD-MM\""
   scalar :date do
     parse fn input ->
       with %Absinthe.Blueprint.Input.String{value: value} <- input,
@@ -23,6 +33,19 @@ defmodule ZssnWeb.Schema do
     serialize fn date ->
       Date.to_iso8601(date)
     end
+  end
+
+  @desc "Decimal scalar type - Accepts strings with a number"
+  scalar :decimal do
+    parse fn input ->
+      with %Absinthe.Blueprint.Input.String{value: value} <- input do
+        Decimal.parse(value)
+      else
+        _ -> :error
+      end
+    end
+
+    serialize &to_string/1
   end
 
   enum :sort_order do

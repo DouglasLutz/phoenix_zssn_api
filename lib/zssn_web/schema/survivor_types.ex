@@ -12,20 +12,40 @@ defmodule ZssnWeb.Schema.SurvivorTypes do
     end
   end
 
+  object :survivor_mutations do
+    @desc "Create a new survivor"
+    field :create_survivor, :survivor_result do
+      arg :input, non_null(:survivor_create_input)
+      resolve &Resolvers.Survivors.create_survivor/3
+    end
+
+    @desc "Update a survivor"
+    field :update_survivor, :survivor_result do
+      arg :input, non_null(:survivor_update_input)
+      arg :id, non_null(:id)
+      resolve &Resolvers.Survivors.update_survivor/3
+    end
+  end
+
   @desc "A survivor in this big world"
   object :survivor do
     field :id, :id
     field :name, :string
     field :age, :integer
     field :gender, :gender
-    field :latitude, :string
-    field :longitude, :string
+    field :latitude, :decimal
+    field :longitude, :decimal
     field :reports, :integer
     field :infected, :boolean
     field :inserted_at, :date
     field :inventory, list_of(:survivor_item) do
       resolve &Resolvers.Inventories.inventory_for_survivor/3
     end
+  end
+
+  object :survivor_result do
+    field :survivor, :survivor
+    field :errors, list_of(:input_error)
   end
 
   @desc "Filtering options for the survivors list"
@@ -50,6 +70,19 @@ defmodule ZssnWeb.Schema.SurvivorTypes do
 
     @desc "Inserted before this date"
     field :inserted_before, :date
+  end
+
+  input_object :survivor_create_input do
+    field :name, :string
+    field :age, :integer
+    field :gender, :gender
+    field :latitude, :decimal
+    field :longitude, :decimal
+  end
+
+  input_object :survivor_update_input do
+    field :latitude, :decimal
+    field :longitude, :decimal
   end
 
   @desc "Available options for gender field"
