@@ -8,8 +8,8 @@ defmodule Zssn.Survivors.Survivor do
     field :latitude, :decimal
     field :longitude, :decimal
     field :name, :string
-    field :infected, :boolean
-    field :reports, :integer
+    field :infected, :boolean, default: false
+    field :reports, :integer, default: 0
 
     has_many :survivor_items, Zssn.Inventories.SurvivorItem
 

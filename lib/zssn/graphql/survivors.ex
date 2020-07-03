@@ -4,6 +4,12 @@ defmodule Zssn.Graphql.Survivors do
   alias Zssn.Repo
   alias Zssn.Survivors.Survivor
 
+  def create_survivor(attrs \\ %{}) do
+    %Survivor{}
+    |> Survivor.changeset(attrs)
+    |> Repo.insert()
+  end
+
   def list_survivors(filters) do
     filters
     |> Enum.reduce(Survivor, fn

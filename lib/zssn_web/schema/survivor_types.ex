@@ -3,6 +3,14 @@ defmodule ZssnWeb.Schema.SurvivorTypes do
 
   alias ZssnWeb.Resolvers
 
+  input_object :survivor_input do
+    field :name, :string
+    field :age, :integer
+    field :gender, :gender
+    field :latitude, :decimal
+    field :longitude, :decimal
+  end
+
   object :survivor_queries do
     @desc "The list of survivors in the application"
     field :survivors, list_of(:survivor) do
@@ -18,8 +26,8 @@ defmodule ZssnWeb.Schema.SurvivorTypes do
     field :name, :string
     field :age, :integer
     field :gender, :gender
-    field :latitude, :string
-    field :longitude, :string
+    field :latitude, :decimal
+    field :longitude, :decimal
     field :reports, :integer
     field :infected, :boolean
     field :inserted_at, :date
