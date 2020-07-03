@@ -2,9 +2,11 @@ defmodule Zssn.Graphql.Survivors do
   import Ecto.Query, warn: false
 
   alias Zssn.Repo
-  def list(module, filters) do
+  alias Zssn.Survivors.Survivor
+
+  def list_survivors(filters) do
     filters
-    |> Enum.reduce(module, fn
+    |> Enum.reduce(Survivor, fn
       {_, nil}, query ->
         query
       {:order, order}, query ->
