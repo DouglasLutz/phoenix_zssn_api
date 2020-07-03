@@ -1,11 +1,12 @@
 defmodule ZssnWeb.Schema do
   use Absinthe.Schema
 
-  import_types __MODULE__.{SurvivorTypes, ItemTypes}
+  import_types __MODULE__.{SurvivorTypes, ItemTypes, InventoryTypes}
 
   query do
     import_fields :survivor_queries
     import_fields :item_queries
+    import_fields :inventory_queries
   end
 
   @desc "Date data structure\nAccepts strings formated as \"YYYY-DD-MM\""

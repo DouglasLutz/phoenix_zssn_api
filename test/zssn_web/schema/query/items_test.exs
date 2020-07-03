@@ -2,7 +2,7 @@ defmodule ZssnWeb.Schema.Query.ItemsTest do
   use ZssnWeb.ConnCase
 
   setup do
-    Zssn.Seeds.run()
+    Zssn.Seeds.items()
 
     {:ok, conn: build_conn()}
   end

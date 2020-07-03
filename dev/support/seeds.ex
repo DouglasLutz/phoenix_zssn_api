@@ -1,33 +1,15 @@
 defmodule Zssn.Seeds do
   alias Zssn.Repo
   alias Zssn.Items.Item
-  alias Zssn.Survivors.Survivor
 
   def run() do
-    Repo.insert! %Item{name: "Water", value: 4}
-    Repo.insert! %Item{name: "Food", value: 3}
-    Repo.insert! %Item{name: "Medication", value: 2}
-    Repo.insert! %Item{name: "Ammunition", value: 1}
+    items()
+  end
 
-    Repo.insert! %Survivor{
-      name: "Douglas",
-      age: 22,
-      gender: "male",
-      infected: false,
-      latitude: 22.392833,
-      longitude: 22.392833,
-      reports: 0
-    }
-
-    Repo.insert! %Survivor{
-      name: "Peter",
-      age: 25,
-      gender: "male",
-      infected: false,
-      latitude: 30.392833,
-      longitude: 42.392833,
-      reports: 0
-    }
+  def tests() do
+    items()
+    survivors()
+    survivor_with_inventory()
   end
 
   def items() do
@@ -71,9 +53,9 @@ defmodule Zssn.Seeds do
 
     {:ok, survivor} =
       Zssn.Survivors.create_survivor(%{
-        name: "Douglas",
+        name: "Carrie",
         age: 22,
-        gender: "male",
+        gender: "female",
         infected: false,
         latitude: 22.392833,
         longitude: 22.392833,
