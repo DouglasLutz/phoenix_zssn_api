@@ -4,10 +4,18 @@ defmodule Zssn.Graphql.Survivors do
   alias Zssn.Repo
   alias Zssn.Survivors.Survivor
 
+  def get_survivor(id), do: Repo.get(Survivor, id)
+
   def create_survivor(attrs \\ %{}) do
     %Survivor{}
     |> Survivor.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def update_survivor(%Survivor{} = survivor, attrs) do
+    survivor
+    |> Survivor.changeset(attrs)
+    |> Repo.update()
   end
 
   def list_survivors(filters) do

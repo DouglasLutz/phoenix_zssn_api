@@ -12,6 +12,21 @@ defmodule ZssnWeb.Schema.SurvivorTypes do
     end
   end
 
+  object :survivor_mutations do
+    @desc "Create a new survivor"
+    field :create_survivor, :survivor_result do
+      arg :input, non_null(:survivor_create_input)
+      resolve &Resolvers.Survivors.create_survivor/3
+    end
+
+    @desc "Update a survivor"
+    field :update_survivor, :survivor_result do
+      arg :input, non_null(:survivor_update_input)
+      arg :id, non_null(:id)
+      resolve &Resolvers.Survivors.update_survivor/3
+    end
+  end
+
   @desc "A survivor in this big world"
   object :survivor do
     field :id, :id
@@ -57,10 +72,15 @@ defmodule ZssnWeb.Schema.SurvivorTypes do
     field :inserted_before, :date
   end
 
-  input_object :survivor_input do
+  input_object :survivor_create_input do
     field :name, :string
     field :age, :integer
     field :gender, :gender
+    field :latitude, :decimal
+    field :longitude, :decimal
+  end
+
+  input_object :survivor_update_input do
     field :latitude, :decimal
     field :longitude, :decimal
   end

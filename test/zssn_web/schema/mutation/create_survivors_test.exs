@@ -7,7 +7,7 @@ defmodule ZssnWeb.Schema.Mutation.CreateSurvivorsTest do
 
 
   @query """
-  mutation CreateSurvivor($survivor: SurvivorInput!){
+  mutation CreateSurvivor($survivor: SurvivorCreateInput!){
     createSurvivor(input: $survivor){
       errors {
         key

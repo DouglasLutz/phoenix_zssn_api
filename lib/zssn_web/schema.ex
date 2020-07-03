@@ -10,10 +10,7 @@ defmodule ZssnWeb.Schema do
   end
 
   mutation do
-    field :create_survivor, :survivor_result do
-      arg :input, non_null(:survivor_input)
-      resolve &ZssnWeb.Resolvers.Survivors.create_survivor/3
-    end
+    import_fields :survivor_mutations
   end
 
   @desc "An error encountered trying to persist input"
