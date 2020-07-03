@@ -4,7 +4,8 @@ defmodule ZssnWeb.Schema.Query.SurvivorsTest do
   alias Zssn.Survivors.Survivor
 
   setup do
-    Zssn.Seeds.run()
+    Zssn.Seeds.survivors()
+    Zssn.Seeds.survivor_with_inventory()
 
     {:ok, conn: build_conn()}
   end
@@ -19,6 +20,9 @@ defmodule ZssnWeb.Schema.Query.SurvivorsTest do
       longitude
       reports
       infected
+      inventory {
+        quantity
+      }
     }
   }
   """
@@ -29,13 +33,26 @@ defmodule ZssnWeb.Schema.Query.SurvivorsTest do
       "data" => %{
         "survivors" => [
           %{
+            "name" => "Carrie",
+            "age" => 22,
+            "gender" => "FEMALE",
+            "infected" => false,
+            "latitude" => "22.392833",
+            "longitude" => "22.392833",
+            "reports" => 0,
+            "inventory" => [
+              %{"quantity" => 42}
+            ]
+          },
+          %{
             "name" => "Douglas",
             "age" => 22,
             "gender" => "MALE",
             "infected" => false,
             "latitude" => "22.392833",
             "longitude" => "22.392833",
-            "reports" => 0
+            "reports" => 0,
+            "inventory" => []
           },
           %{
             "name" => "Peter",
@@ -44,7 +61,8 @@ defmodule ZssnWeb.Schema.Query.SurvivorsTest do
             "infected" => false,
             "latitude" => "30.392833",
             "longitude" => "42.392833",
-            "reports" => 0
+            "reports" => 0,
+            "inventory" => []
           }
         ]
       }
@@ -84,7 +102,8 @@ defmodule ZssnWeb.Schema.Query.SurvivorsTest do
       "data" => %{
         "survivors" => [
           %{"name" => "Peter"},
-          %{"name" => "Douglas"}
+          %{"name" => "Douglas"},
+          %{"name" => "Carrie"}
         ]
       }
     }
@@ -125,7 +144,8 @@ defmodule ZssnWeb.Schema.Query.SurvivorsTest do
       "data" => %{
         "survivors" => [
           %{"name" => "Peter"},
-          %{"name" => "Douglas"}
+          %{"name" => "Douglas"},
+          %{"name" => "Carrie"}
         ]
       }
     }

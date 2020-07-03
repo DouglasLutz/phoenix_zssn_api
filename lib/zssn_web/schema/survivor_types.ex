@@ -23,6 +23,9 @@ defmodule ZssnWeb.Schema.SurvivorTypes do
     field :reports, :integer
     field :infected, :boolean
     field :inserted_at, :date
+    field :inventory, list_of(:survivor_item) do
+      resolve &Resolvers.Inventories.inventory_for_survivor/3
+    end
   end
 
   @desc "Filtering options for the survivors list"
