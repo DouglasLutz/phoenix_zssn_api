@@ -4,6 +4,11 @@ defmodule Zssn.Graphql.Items do
   alias Zssn.Repo
   alias Zssn.Items.Item
 
+  def create_item(attrs \\ %{}) do
+    %Item{}
+    |> Item.changeset(attrs)
+    |> Repo.insert()
+  end
 
   def list_items(filters) do
     filters

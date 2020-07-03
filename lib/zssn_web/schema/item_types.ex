@@ -11,11 +11,23 @@ defmodule ZssnWeb.Schema.ItemTypes do
     end
   end
 
+  object :item_mutations do
+    field :create_item, :item_result do
+      arg :input, :item_create_input
+      resolve &Resolvers.Items.create_item/3
+    end
+  end
+
   @desc "Existing items"
   object :item do
     field :id, :id
     field :name, :string
     field :value, :integer
+  end
+
+  object :item_result do
+    field :item, :item
+    field :errors, list_of(:input_error)
   end
 
   @desc "Filtering options for the items list"
@@ -28,5 +40,10 @@ defmodule ZssnWeb.Schema.ItemTypes do
 
     @desc "Value below a value"
     field :valued_below, :integer
+  end
+
+  input_object :item_create_input do
+    field :name, :string
+    field :value, :integer
   end
 end
