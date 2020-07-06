@@ -12,6 +12,7 @@ defmodule ZssnWeb.Schema do
   mutation do
     import_fields :survivor_mutations
     import_fields :item_mutations
+    import_fields :inventory_mutations
   end
 
   @desc "An error encountered trying to persist input"
