@@ -9,4 +9,13 @@ defmodule ZssnWeb.Resolvers.Inventories do
     query = Ecto.assoc(survivor, :survivor_items)
     {:ok, Zssn.Repo.all(query)}
   end
+
+  def trade_items(_, %{input: params}, _) do
+    case Zssn.Graphql.Inventories.trade_items(params) do
+      {:ok, message} ->
+        {:ok, %{message: message}}
+      {:error, message} ->
+        {:error, %{message: message}}
+    end
+  end
 end
