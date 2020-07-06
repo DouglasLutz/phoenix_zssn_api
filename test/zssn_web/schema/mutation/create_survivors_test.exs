@@ -58,6 +58,71 @@ defmodule ZssnWeb.Schema.Mutation.CreateSurvivorsTest do
     }
   end
 
+  @query """
+  mutation CreateSurvivor($survivor: SurvivorCreateInput!){
+    createSurvivor(input: $survivor){
+      errors {
+        key
+        message
+      }
+      survivor {
+        name
+        gender
+        age
+        latitude
+        longitude
+        inventory{
+          quantity
+          itemId
+        }
+        infected
+        reports
+      }
+    }
+  }
+  """
+  @survivor %{
+    name: "Chloe",
+    age: 14,
+    gender: "FEMALE",
+    latitude: "22.3245",
+    longitude: "35.2394"
+  }
+  test "createSurvivor field with inventory creates a survivor and it's survivor_items", %{conn: conn} do
+    item = Zssn.Seeds.items() |> List.first()
+
+    survivor = %{
+      name: "Chloe",
+      age: 14,
+      gender: "FEMALE",
+      latitude: "22.3245",
+      longitude: "35.2394",
+      survivor_items: [
+        %{item_id: item.id, quantity: 10}
+      ]
+    }
+
+    conn = post conn, "/api", query: @query, variables: %{"survivor" => survivor}
+
+    assert json_response(conn, 200) == %{
+      "data" => %{
+        "createSurvivor" => %{
+          "errors" => nil,
+          "survivor" => %{
+            "name" => survivor.name,
+            "age" => survivor.age,
+            "gender" => survivor.gender,
+            "latitude" => survivor.latitude,
+            "longitude" => survivor.longitude,
+            "infected" => false,
+            "inventory" => [%{"itemId" => "#{item.id}", "quantity" => 10}],
+            "reports" => 0
+          }
+        }
+      }
+    }
+  end
+
   @survivor %{
     age: 14,
     gender: "FEMALE",
