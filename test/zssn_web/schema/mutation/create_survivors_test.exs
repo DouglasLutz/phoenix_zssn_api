@@ -58,6 +58,67 @@ defmodule ZssnWeb.Schema.Mutation.CreateSurvivorsTest do
     }
   end
 
+  test "createSurvivor field with inventory creates a survivor and it's survivor_items", %{conn: conn} do
+    item = Zssn.Seeds.items() |> List.first()
+
+    survivor = %{
+      name: "Chloe",
+      age: 14,
+      gender: "FEMALE",
+      latitude: "22.3245",
+      longitude: "35.2394",
+      survivor_items: [
+        %{item_id: item.id, quantity: 10}
+      ]
+    }
+
+    conn = post conn, "/api", query: @query, variables: %{"survivor" => survivor}
+
+    assert json_response(conn, 200) == %{
+      "data" => %{
+        "createSurvivor" => %{
+          "errors" => nil,
+          "survivor" => %{
+            "name" => survivor.name,
+            "age" => survivor.age,
+            "gender" => survivor.gender,
+            "latitude" => survivor.latitude,
+            "longitude" => survivor.longitude,
+            "infected" => false,
+            "inventory" => [%{"itemId" => "#{item.id}", "quantity" => 10}],
+            "reports" => 0
+          }
+        }
+      }
+    }
+  end
+
+  test "createSurvivor field with invalid inventory item_id fails", %{conn: conn} do
+    survivor = %{
+      name: "Chloe",
+      age: 14,
+      gender: "FEMALE",
+      latitude: "22.3245",
+      longitude: "35.2394",
+      survivor_items: [
+        %{item_id: 200, quantity: 10}
+      ]
+    }
+
+    conn = post conn, "/api", query: @query, variables: %{"survivor" => survivor}
+
+    assert json_response(conn, 200) == %{
+      "data" => %{
+        "createSurvivor" => %{
+          "errors" => [
+            %{"key" => "survivor_items.item_id", "message" => "does not exist"}
+          ],
+          "survivor" => nil
+        }
+      }
+    }
+  end
+
   @survivor %{
     age: 14,
     gender: "FEMALE",

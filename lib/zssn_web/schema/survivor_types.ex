@@ -78,6 +78,12 @@ defmodule ZssnWeb.Schema.SurvivorTypes do
     field :gender, :gender
     field :latitude, :decimal
     field :longitude, :decimal
+    field :survivor_items, list_of(:input_survivor_item)
+  end
+
+  input_object :input_survivor_item do
+    field :item_id, :id
+    field :quantity, :integer
   end
 
   input_object :survivor_update_input do
