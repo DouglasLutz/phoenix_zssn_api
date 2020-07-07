@@ -1,5 +1,4 @@
 defmodule ZssnWeb.Resolvers.Items do
-  import ZssnWeb.Resolvers.Support.ErrorFormat
 
   alias Zssn.Graphql.Items
 
@@ -8,11 +7,8 @@ defmodule ZssnWeb.Resolvers.Items do
   end
 
   def create_item(_, %{input: params}, _) do
-    case Items.create_item(params) do
-      {:ok, item} ->
-        {:ok, %{item: item}}
-      {:error, changeset} ->
-        {:ok, %{errors: transform_errors(changeset)}}
+    with {:ok, item} <- Items.create_item(params) do
+      {:ok, %{item: item}}
     end
   end
 end

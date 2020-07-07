@@ -2,6 +2,10 @@ defmodule ZssnWeb.Schema do
   use Absinthe.Schema
 
   import_types __MODULE__.{SurvivorTypes, ItemTypes, InventoryTypes}
+  alias ZssnWeb.Schema.Middleware
+
+  def middleware(middleware, _field, %{identifier: :mutation}), do: middleware ++ [Middleware.ChangesetErrors]
+  def middleware(middleware, _field, _object), do: middleware
 
   query do
     import_fields :survivor_queries

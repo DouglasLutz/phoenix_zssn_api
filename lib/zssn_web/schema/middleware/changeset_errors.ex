@@ -1,4 +1,12 @@
-defmodule ZssnWeb.Resolvers.Support.ErrorFormat do
+defmodule ZssnWeb.Schema.Middleware.ChangesetErrors do
+  @behaviour Absinthe.Middleware
+
+  def call(res, _) do
+    with %{errors: [%Ecto.Changeset{} = changeset]} <- res do
+      %{res | value: %{errors: transform_errors(changeset)}, errors: []}
+    end
+  end
+
   def transform_errors(changeset) do
     changeset
     |> Ecto.Changeset.traverse_errors(&format_error/1)

@@ -1,5 +1,4 @@
 defmodule ZssnWeb.Resolvers.Survivors do
-  import ZssnWeb.Resolvers.Support.ErrorFormat
 
   alias Zssn.Graphql.Survivors
   alias Zssn.Survivors.Survivor
@@ -9,11 +8,8 @@ defmodule ZssnWeb.Resolvers.Survivors do
   end
 
   def create_survivor(_, %{input: params}, _) do
-    case Survivors.create_survivor(params) do
-      {:ok, survivor} ->
-        {:ok, %{survivor: survivor}}
-      {:error, changeset} ->
-        {:ok, %{errors: transform_errors(changeset)}}
+    with {:ok, survivor} <- Survivors.create_survivor(params) do
+      {:ok, %{survivor: survivor}}
     end
   end
 
@@ -24,8 +20,6 @@ defmodule ZssnWeb.Resolvers.Survivors do
     else
       nil ->
         {:ok, %{errors: [%{key: :id, message: "Couldn't find survivor"}]}}
-      {:error, changeset} ->
-        {:ok, %{errors: transform_errors(changeset)}}
     end
   end
 end
